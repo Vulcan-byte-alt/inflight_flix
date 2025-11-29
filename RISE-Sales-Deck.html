@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE Program - Sales Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #003366;
+            --gold: #FFC72C;
+            --cyan: #00BCD4;
+            --orange: #FF8C00;
+            --dark-bg: #0a0e1a;
+            --light-bg: #ffffff;
+        }
+
+        @page {
+            size: 1920px 1080px;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+            .slide {
+                page-break-after: always;
+                page-break-inside: avoid;
+                margin-bottom: 0;
+            }
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .slide-container {
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+
+        .slide {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* Slide 1: Title Slide */
+        .slide-1 {
+            background: linear-gradient(135deg, var(--navy) 0%, #001f3f 100%);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .slide-1::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 188, 212, 0.1) 0%, transparent 70%);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, 30px); }
+        }
+
+        .slide-1 .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .slide-1 .badge {
+            display: inline-block;
+            background: rgba(0, 188, 212, 0.15);
+            border: 1px solid rgba(0, 188, 212, 0.4);
+            color: var(--cyan);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .slide-1 h1 {
+            font-size: 5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            letter-spacing: 4px;
+            font-weight: 900;
+        }
+
+        .slide-1 h1 span {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-1 p {
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .slide-1 .tagline {
+            font-size: 2.2rem;
+            color: var(--gold);
+            font-weight: 300;
+        }
+
+        /* Slide 2: Problem Statement */
+        .slide-2 {
+            background: white;
+            padding: 5rem 6rem;
+        }
+
+        .slide-header {
+            margin-bottom: 3rem;
+        }
+
+        .slide-header .label {
+            display: inline-block;
+            background: rgba(0, 188, 212, 0.1);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .slide-header h2 {
+            font-size: 3.5rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .slide-header h2 span {
+            color: var(--cyan);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(0, 51, 102, 0.05) 0%, rgba(0, 188, 212, 0.05) 100%);
+            border-left: 4px solid var(--orange);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.8rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            font-size: 1.2rem;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        /* Slide 3: Solution */
+        .slide-3 {
+            background: linear-gradient(135deg, var(--navy) 0%, #001f3f 100%);
+            padding: 5rem 6rem;
+            color: white;
+        }
+
+        .slide-3 .slide-header .label {
+            background: rgba(0, 188, 212, 0.2);
+            border-color: var(--cyan);
+        }
+
+        .slide-3 .slide-header h2 {
+            color: white;
+        }
+
+        .slide-3 .slide-header h2 span {
+            color: var(--gold);
+        }
+
+        .solution-highlight {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 2rem;
+        }
+
+        .solution-highlight h3 {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .solution-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .solution-item {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .solution-item i {
+            color: var(--cyan);
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+        }
+
+        .solution-item div h4 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .solution-item div p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* Slide 4: Value Props */
+        .slide-4 {
+            background: white;
+            padding: 5rem 6rem;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-box {
+            background: linear-gradient(135deg, rgba(0, 51, 102, 0.05) 0%, rgba(0, 188, 212, 0.05) 100%);
+            border: 1.5px solid rgba(0, 188, 212, 0.3);
+            border-radius: 15px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-box i {
+            font-size: 3rem;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .value-box h3 {
+            font-size: 1.6rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .value-box p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Slide 5: Stats */
+        .slide-5 {
+            background: linear-gradient(135deg, var(--cyan) 0%, #0088a8 100%);
+            padding: 5rem 6rem;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+        }
+
+        .stat-box .number {
+            font-size: 4.5rem;
+            font-weight: 900;
+            font-family: 'Merriweather', serif;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .stat-box .label {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        /* Slide 6: How It Works */
+        .slide-6 {
+            background: white;
+            padding: 5rem 6rem;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .process-step {
+            position: relative;
+            text-align: center;
+        }
+
+        .process-step::after {
+            content: '→';
+            position: absolute;
+            right: -2rem;
+            top: 2rem;
+            font-size: 2.5rem;
+            color: var(--cyan);
+        }
+
+        .process-step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--orange) 0%, #ff6b00 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
+        }
+
+        .process-step h3 {
+            font-size: 1.4rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .process-step p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Slide 7: CTA */
+        .slide-7 {
+            background: linear-gradient(135deg, var(--navy) 0%, #001f3f 100%);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5rem;
+        }
+
+        .slide-7 h2 {
+            font-size: 4rem;
+            color: white;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .slide-7 h2 span {
+            color: var(--gold);
+        }
+
+        .slide-7 p {
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .cta-btn {
+            padding: 1.5rem 4rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn.primary {
+            background: linear-gradient(135deg, var(--orange) 0%, #ff6b00 100%);
+            color: white;
+            box-shadow: 0 6px 25px rgba(255, 140, 0, 0.35);
+        }
+
+        .cta-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .contact-info {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-info a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        /* Footer for all slides */
+        .slide-footer {
+            position: absolute;
+            bottom: 2rem;
+            left: 6rem;
+            right: 6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .slide-2 .slide-footer,
+        .slide-4 .slide-footer,
+        .slide-6 .slide-footer {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .slide-footer .logo {
+            font-family: 'Merriweather', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+            .slide {
+                margin-bottom: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+
+        <!-- Slide 1: Title -->
+        <div class="slide slide-1">
+            <div class="content">
+                <div class="badge">World's First Inflight Strategy-as-a-Service</div>
+                <h1><span>RISE</span> Program</h1>
+                <p>Reasons to Visit – Inflight Strategic Execution</p>
+                <p class="tagline">Connecting Passengers and Places</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: The Problem -->
+        <div class="slide slide-2">
+            <div class="slide-header">
+                <div class="label">The Challenge</div>
+                <h2>95% of DMOs Are <span>Missing Out</span></h2>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <h3><i class="fa-solid fa-circle-xmark" style="color: var(--orange); margin-right: 0.5rem;"></i> Massive Ad Waste</h3>
+                    <p>Traditional digital campaigns reach everyone—including people who will never visit your destination.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3><i class="fa-solid fa-circle-xmark" style="color: var(--orange); margin-right: 0.5rem;"></i> Short Attention Spans</h3>
+                    <p>Social media gives you 3 seconds. Inflight gives you 2-18 hours of captive attention.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3><i class="fa-solid fa-circle-xmark" style="color: var(--orange); margin-right: 0.5rem;"></i> Post-Search Competition</h3>
+                    <p>You're fighting for clicks after travelers have already decided. Reach them before Google.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3><i class="fa-solid fa-circle-xmark" style="color: var(--orange); margin-right: 0.5rem;"></i> No Inflight Strategy</h3>
+                    <p>Only 5% of DMOs have cracked inflight marketing. The rest are missing 2.3 billion travelers.</p>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="logo">RISE</div>
+                <div>www.inflightflix.aero</div>
+            </div>
+        </div>
+
+        <!-- Slide 3: The Solution -->
+        <div class="slide slide-3">
+            <div class="slide-header">
+                <div class="label">The Solution</div>
+                <h2>Inflight Strategy <span>Made Turnkey</span></h2>
+            </div>
+
+            <div class="solution-highlight">
+                <h3>RISE delivers everything you need:</h3>
+
+                <div class="solution-list">
+                    <div class="solution-item">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div>
+                            <h4>Pre-Approved Content Blueprint</h4>
+                            <p>Content formats ready for inflight entertainment systems—no guesswork.</p>
+                        </div>
+                    </div>
+
+                    <div class="solution-item">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div>
+                            <h4>Partnership Network</h4>
+                            <p>Access to 114 airlines through 7 strategic IFE partners.</p>
+                        </div>
+                    </div>
+
+                    <div class="solution-item">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div>
+                            <h4>Strategic ROI Calculator</h4>
+                            <p>Proof of performance tracking—know exactly what you're getting.</p>
+                        </div>
+                    </div>
+
+                    <div class="solution-item">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div>
+                            <h4>Content Asset Management</h4>
+                            <p>Centralized DAM platform for destinations and IFE suppliers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="logo">RISE</div>
+                <div>www.inflightflix.aero</div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Value Props -->
+        <div class="slide slide-4">
+            <div class="slide-header">
+                <div class="label">Why RISE</div>
+                <h2><span>Unmatched</span> Value Propositions</h2>
+            </div>
+
+            <div class="value-grid">
+                <div class="value-box">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <h3>Zero Ad Waste</h3>
+                    <p>100% verified travelers with air access to your destination. Every impression counts.</p>
+                </div>
+
+                <div class="value-box">
+                    <i class="fa-solid fa-plane"></i>
+                    <h3>Captive Audience</h3>
+                    <p>2-18 hours of uninterrupted dwell time at 35,000 feet.</p>
+                </div>
+
+                <div class="value-box">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <h3>Pre-Search Inspiration</h3>
+                    <p>Plant the seed before they search Google.</p>
+                </div>
+
+                <div class="value-box">
+                    <i class="fa-solid fa-rocket"></i>
+                    <h3>First-Mover Advantage</h3>
+                    <p>Be ahead of 95% of your competition.</p>
+                </div>
+
+                <div class="value-box">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h3>Strategic ROI</h3>
+                    <p>Proprietary tracking system proves performance.</p>
+                </div>
+
+                <div class="value-box">
+                    <i class="fa-solid fa-globe"></i>
+                    <h3>Global Consistency</h3>
+                    <p>Your message, perfectly formatted for every airline.</p>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="logo">RISE</div>
+                <div>www.inflightflix.aero</div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Stats -->
+        <div class="slide slide-5">
+            <div class="slide-header" style="text-align: center;">
+                <div class="label" style="background: rgba(255, 255, 255, 0.2); border-color: white; color: white;">Our Impact</div>
+                <h2 style="color: white;">Connecting Passengers, <span style="color: var(--gold);">Globally</span></h2>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number">2.3B</div>
+                    <div class="label">Passengers Reached</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="number">114</div>
+                    <div class="label">Partner Airlines</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="number">7</div>
+                    <div class="label">Industry Partners</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="number">100%</div>
+                    <div class="label">Verified Travelers</div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="logo">RISE</div>
+                <div>www.inflightflix.aero</div>
+            </div>
+        </div>
+
+        <!-- Slide 6: How It Works -->
+        <div class="slide slide-6">
+            <div class="slide-header">
+                <div class="label">The Process</div>
+                <h2>How <span>RISE</span> Works</h2>
+            </div>
+
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Strategy Development</h3>
+                    <p>We analyze your markets, air access, and demographics to create a turnkey inflight strategy.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Content Creation</h3>
+                    <p>Your "Reasons to Visit" content is curated in globally consistent, pre-approved formats.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Distribution</h3>
+                    <p>Content distributed across 114 airlines through 7 strategic IFE partnerships.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Measure & Optimize</h3>
+                    <p>Track performance and optimize campaigns based on real engagement data.</p>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="logo">RISE</div>
+                <div>www.inflightflix.aero</div>
+            </div>
+        </div>
+
+        <!-- Slide 7: CTA -->
+        <div class="slide slide-7">
+            <h2>Ready to <span>Transform</span><br>Your Destination Marketing?</h2>
+            <p>Join the 5% of DMOs who are winning at inflight marketing. Let's connect your destination with millions of travelers.</p>
+
+            <div class="cta-buttons">
+                <a href="mailto:martin@inflightflix.aero" class="cta-btn primary">Schedule a Consultation</a>
+                <a href="tel:+353861923500" class="cta-btn secondary">Call Now</a>
+            </div>
+
+            <div class="contact-info">
+                <p>
+                    <strong>Martin O'Regan</strong> – CEO<br>
+                    <a href="mailto:martin@inflightflix.aero">martin@inflightflix.aero</a> |
+                    <a href="tel:+353861923500">+353 86 192 3500</a>
+                </p>
+            </div>
+
+            <div class="slide-footer">
+                <div class="logo">RISE</div>
+                <div>www.inflightflix.aero</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

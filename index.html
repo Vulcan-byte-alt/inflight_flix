@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE Program - Connecting Passengers and Places</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #003366;
+            --gold: #FFC72C;
+            --cyan: #00BCD4;
+            --orange: #FF8C00;
+            --dark-bg: #0a0e1a;
+            --light-bg: #ffffff;
+            --text-light: #ffffff;
+            --text-dark: #1a1a1a;
+            --gray: #6b7280;
+            --gradient-1: linear-gradient(135deg, var(--navy) 0%, #001f3f 100%);
+            --gradient-2: linear-gradient(135deg, var(--cyan) 0%, var(--navy) 100%);
+            --gradient-3: linear-gradient(135deg, var(--orange) 0%, #ff6b00 100%);
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: var(--dark-bg);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Merriweather', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-3);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 140, 0, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-background img,
+        .hero-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.5) 100%);
+            z-index: 2;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--cyan);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--orange);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            padding: 8rem 2rem 5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3.5rem;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            color: var(--text-light);
+            font-weight: 700;
+            letter-spacing: 8px;
+            line-height: 1.25;
+            animation: fadeInUp 0.8s ease 0.4s both;
+            text-transform: uppercase;
+            white-space: nowrap;
+            margin: -1rem 0 0 0;
+        }
+
+        .hero h1 br {
+            display: block;
+        }
+
+        @media (max-width: 1200px) {
+            .hero h1 {
+                letter-spacing: 5px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                white-space: normal;
+                letter-spacing: 3px;
+                font-size: 2.2rem;
+            }
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title .gradient-text {
+            color: var(--cyan);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.15), rgba(0, 188, 212, 0.05));
+            border: 1px solid rgba(0, 188, 212, 0.4);
+            color: var(--cyan);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s ease 0.2s both;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.15);
+            backdrop-filter: blur(10px);
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+
+        .hero-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .hero-text-group::before {
+            content: '';
+            position: absolute;
+            top: -1.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.15rem, 2vw, 1.5rem);
+            background: linear-gradient(135deg, var(--gold) 0%, rgba(255, 199, 44, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 400;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.6s both;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 650px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.8s both;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 1s both;
+            margin: 0;
+        }
+
+        .btn i {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(5px);
+        }
+
+
+        .btn {
+            padding: 1.1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--orange) 0%, #ff6b00 100%);
+            color: white;
+            box-shadow: 0 6px 25px rgba(255, 140, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255, 140, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--dark-bg) url('dark.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 4rem 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.35) 100%);
+            z-index: -1;
+        }
+
+        .stat-card:nth-child(1)::before {
+            background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80');
+        }
+
+        .stat-card:nth-child(2)::before {
+            background-image: url('https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=600&q=80');
+        }
+
+        .stat-card:nth-child(3)::before {
+            background-image: url('https://images.unsplash.com/photo-1542296332-2e4473faf563?w=600&q=80');
+        }
+
+        .stat-card:nth-child(4)::before {
+            background-image: url('travel.webp');
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 188, 212, 0.2);
+            border-color: rgba(0, 188, 212, 0.4);
+        }
+
+        .stat-number {
+            font-size: clamp(4rem, 6vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            font-family: 'Merriweather', serif;
+            letter-spacing: -2px;
+            line-height: 1;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            position: relative;
+            padding-top: 1rem;
+        }
+
+        .stat-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+        }
+
+        /* Value Props Section */
+        .value-props {
+            background: var(--dark-bg) url('dark.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-props .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(0, 188, 212, 0.1);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Core Offering Section */
+        .core-offering {
+            background: var(--dark-bg) url('dark.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .core-offering .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .core-offering-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .core-offering-text h2 {
+            font-size: 2rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .core-offering-text h2 .highlight {
+            color: var(--orange);
+            font-weight: 900;
+        }
+
+        .core-offering-text p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .core-offering-text .core-tagline {
+            font-size: 1.3rem;
+            color: var(--gold);
+            font-weight: 700;
+            font-style: italic;
+            margin-top: 3rem;
+        }
+
+        .core-offering-image {
+            text-align: center;
+        }
+
+        .core-offering-image img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
+            transition: all 0.4s ease;
+        }
+
+        .core-offering-image img:hover {
+            transform: translateY(-8px) scale(1.02);
+            filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (max-width: 1024px) {
+            .core-offering-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .core-offering-image {
+                order: -1;
+            }
+        }
+
+        .value-props .section-badge {
+            background: rgba(0, 188, 212, 0.1);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .value-props .section-title {
+            color: var(--text-light);
+        }
+
+        .value-props .section-title .gradient-text {
+            color: var(--cyan);
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .value-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .value-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .value-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .value-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 188, 212, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 188, 212, 0.2);
+        }
+
+        .value-card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--navy), var(--cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+            z-index: 1;
+        }
+
+        .value-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: all 0.4s ease;
+        }
+
+        .value-card:hover .value-card-image img {
+            transform: scale(1.05);
+            opacity: 0.85;
+        }
+
+        .value-card-content {
+            padding: 3rem 2.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .value-card h3 {
+            font-size: 1.7rem;
+            color: var(--text-light);
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .value-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.05rem;
+            line-height: 1.9;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            background: var(--light-bg) url('light.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.10);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .how-it-works .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .how-it-works .section-badge {
+            background: rgba(0, 51, 102, 0.1);
+            border-color: var(--navy);
+            color: var(--navy);
+        }
+
+        .how-it-works .section-title {
+            color: var(--text-dark);
+        }
+
+        .how-it-works .section-title .gradient-text {
+            color: #0088a8;
+        }
+
+        .section-header.light .section-badge {
+            background: rgba(0, 51, 102, 0.1);
+            border-color: var(--navy);
+            color: var(--navy);
+        }
+
+        .section-header.light .section-title {
+            color: var(--text-dark);
+        }
+
+        .section-header.light .gradient-text {
+            color: #0088a8;
+        }
+
+        .section-header.light .section-subtitle {
+            color: var(--gray);
+        }
+
+        .cta-content h2 .gradient-text {
+            color: #0088a8;
+        }
+
+        .partners .cta-content h2 .gradient-text {
+            color: #0088a8;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step-card {
+            position: relative;
+            padding: 3rem 2.5rem;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .step-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 136, 168, 0.2);
+            border-color: rgba(0, 136, 168, 0.4);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 2.5rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-3);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
+        }
+
+        .step-card h3 {
+            font-size: 1.6rem;
+            color: var(--navy);
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 1rem;
+        }
+
+        .step-card p {
+            color: rgba(26, 26, 26, 0.8);
+            line-height: 1.9;
+            font-size: 1.05rem;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        /* Video Showcase Section */
+        .video-showcase {
+            background: var(--light-bg) url('light.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.10);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .video-showcase .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .video-showcase .section-badge {
+            background: rgba(0, 51, 102, 0.1);
+            border-color: var(--navy);
+            color: var(--navy);
+        }
+
+        .video-showcase .section-title {
+            color: var(--text-dark);
+        }
+
+        .video-showcase .section-title .gradient-text {
+            color: #0088a8;
+        }
+
+        .video-showcase-container {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+        }
+
+        .video-showcase-container video {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .video-showcase-container video:hover {
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+            border-color: rgba(0, 188, 212, 0.5);
+            transform: scale(1.01);
+        }
+
+        .video-caption {
+            text-align: center;
+            margin-top: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .video-caption-glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 2.5rem 3rem;
+            transition: all 0.4s ease;
+        }
+
+        .video-caption-glass:hover {
+            border-color: rgba(0, 136, 168, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 136, 168, 0.15);
+        }
+
+        .video-caption-glass h3 {
+            font-size: 1.8rem;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .video-caption-glass p {
+            font-size: 1.1rem;
+            color: rgba(0, 0, 0, 0.7);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Touchpoints Section */
+        .touchpoints {
+            background: var(--light-bg) url('light.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .touchpoints::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.10);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .touchpoints .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .touchpoints-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 1024px) {
+            .touchpoints-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .touchpoints-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .touchpoint-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .touchpoint-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .touchpoint-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 136, 168, 0.2);
+            border-color: rgba(0, 188, 212, 0.4);
+        }
+
+        .touchpoint-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, var(--navy), var(--cyan));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .touchpoint-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+
+        .touchpoint-content {
+            padding: 2.5rem;
+        }
+
+        .touchpoint-content h3 {
+            font-size: 1.6rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .touchpoint-content p {
+            color: rgba(26, 26, 26, 0.8);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            background: var(--dark-bg) url('dark.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-section .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-intro {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto 4rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .timeline-diagram {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            text-align: center;
+        }
+
+        .timeline-diagram img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .timeline-diagram img:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background: var(--dark-bg) url('dark.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.4s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 188, 212, 0.2);
+            border-color: rgba(0, 188, 212, 0.4);
+        }
+
+        .testimonial-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .testimonial-video {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: var(--navy);
+            position: relative;
+        }
+
+        .testimonial-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .testimonial-info {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .testimonial-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        /* Contact Form Section */
+        .contact-form-section {
+            background: var(--light-bg) url('light.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.10);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .contact-form-section .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-form-section .section-badge {
+            background: rgba(0, 51, 102, 0.1);
+            border-color: var(--navy);
+            color: var(--navy);
+        }
+
+        .contact-form-section .section-title {
+            color: var(--text-dark);
+        }
+
+        .contact-form-section .section-title .gradient-text {
+            color: #0088a8;
+        }
+
+        .form-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            color: rgba(26, 26, 26, 0.75);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .contact-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            padding: 3rem;
+            transition: all 0.4s ease;
+        }
+
+        .contact-form:hover {
+            border-color: rgba(0, 136, 168, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 136, 168, 0.15);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1.5px solid rgba(0, 51, 102, 0.2);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            color: var(--navy);
+            font-size: 1rem;
+            font-family: 'Lato', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(0, 51, 102, 0.4);
+        }
+
+        .form-group input:hover,
+        .form-group textarea:hover {
+            border-color: rgba(0, 51, 102, 0.3);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0088a8;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 16px rgba(0, 136, 168, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .form-submit .btn {
+            padding: 1.2rem 3.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--light-bg) url('light.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.10);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .cta-section .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section .section-badge {
+            background: rgba(0, 51, 102, 0.1);
+            border-color: var(--navy);
+            color: var(--navy);
+        }
+
+        .cta-section .section-title {
+            color: var(--text-dark);
+        }
+
+        .cta-section .section-title .gradient-text {
+            color: #0088a8;
+        }
+
+        .cta-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .cta-section h2 .gradient-text {
+            color: #0088a8;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: rgba(0, 0, 0, 0.7);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+            align-items: center;
+        }
+
+        .partner-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--navy);
+            padding: 2rem;
+        }
+
+        .partner-logo:hover {
+            opacity: 1;
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .cta-section .partner-logo {
+            color: var(--navy);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 350px;
+        }
+
+        .footer-logo {
+            font-family: 'Merriweather', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: 3px;
+        }
+
+        .footer-logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyan);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--cyan);
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--gold), var(--orange));
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .value-grid,
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo"><img src="logo.png" alt="RISE Logo"></div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#value">Value</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#partners">Partners</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#contact" class="nav-cta">Get Started</a>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Background Video with Poster -->
+        <div class="hero-background">
+            <video autoplay muted loop playsinline poster="hero.png">
+                <source src="hero.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Dark overlay for text readability -->
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">World's First Inflight Strategy-as-a-Service</div>
+
+            <h1>
+                <span class="gradient-text">Connecting</span><br>
+                Passengers and Places
+            </h1>
+
+            <div class="hero-text-group">
+                <p class="hero-subtitle">Reasons to Visit – Inflight Strategic Execution</p>
+                <p class="hero-description">
+                    Transform how destinations reach, engage, and inspire real travelers when they're dreaming and planning their next adventure.
+                </p>
+            </div>
+
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">Start Your Strategy <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Our Impact</div>
+                <h2 class="section-title" style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0;">Connecting Passengers, <span class="gradient-text">Globally</span></h2>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" data-target="2.3">0</div>
+                    <div class="stat-label">Billion Passengers Reached</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="114">0</div>
+                    <div class="stat-label">Partner Airlines</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="7">0</div>
+                    <div class="stat-label">Industry Partners</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="100">0</div>
+                    <div class="stat-label">% Verified Travelers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Offering Section -->
+    <section class="core-offering">
+        <div class="container">
+            <div class="core-offering-content">
+                <div class="core-offering-text">
+                    <h2><span class="highlight">Entertain</span> passengers with reasons to visit</h2>
+                    <p>Create inflight entertainment content in pre-approved format.</p>
+
+                    <h2><span class="highlight">Execute</span> a strategy to distribute to all inflight content providers.</h2>
+                    <p>Execute a strategy to distribute to all inflight content providers.</p>
+
+                    <h2><span class="highlight">Inspire</span> passengers planning and dreaming where to go next.</h2>
+                    <p>Inspire passengers planning and dreaming where to go next.</p>
+
+                    <p class="core-tagline">That is the core offering of the RISE Program.</p>
+                </div>
+                <div class="core-offering-image">
+                    <img src="mobile.webp" alt="RISE Mobile App">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Props Section -->
+    <section class="value-props" id="value">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Why RISE</div>
+                <h2 class="section-title"><span class="gradient-text">Unmatched</span> Value for Destination<br>Marketers</h2>
+            </div>
+
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-card-image">
+                        <img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=500&q=80" alt="Target precision">
+                    </div>
+                    <div class="value-card-content">
+                        <h3>Zero Ad Waste</h3>
+                        <p>Reach 100% verified travelers with air access to your destination. Every impression counts, every view has intent.</p>
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-card-image">
+                        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&q=80" alt="Aircraft in flight">
+                    </div>
+                    <div class="value-card-content">
+                        <h3>Captive Audience</h3>
+                        <p>2-18 hours of uninterrupted dwell time. Your content has their full attention at 35,000 feet.</p>
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-card-image">
+                        <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=500&q=80" alt="Travel inspiration">
+                    </div>
+                    <div class="value-card-content">
+                        <h3>Pre-Search Inspiration</h3>
+                        <p>Reach travelers before they search Google. Plant the seed of inspiration when they're dreaming about their next trip.</p>
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-card-image">
+                        <img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=500&q=80" alt="First to market">
+                    </div>
+                    <div class="value-card-content">
+                        <h3>First-Mover Advantage</h3>
+                        <p>Only 5% of DMOs have an inflight strategy. Be ahead of 95% of your competition.</p>
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-card-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" alt="Analytics dashboard">
+                    </div>
+                    <div class="value-card-content">
+                        <h3>Strategic ROI Calculator</h3>
+                        <p>Proof of performance with our proprietary ROI tracking system. Know exactly what you're getting.</p>
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-card-image">
+                        <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=500&q=80" alt="Global network">
+                    </div>
+                    <div class="value-card-content">
+                        <h3>Global Consistency</h3>
+                        <p>Pre-approved content blueprint for inflight entertainment. Your message, perfectly formatted for every airline.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">The Process</div>
+                <h2 class="section-title">How <span class="gradient-text">RISE</span> Works</h2>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Strategy Development</h3>
+                    <p>We analyze your key markets, air access, and target demographics to create a turnkey inflight marketing strategy.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Content Creation</h3>
+                    <p>Your "Reasons to Visit" content is curated in globally consistent formats, pre-approved for inflight entertainment systems.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Distribution & Placement</h3>
+                    <p>Content is distributed across our network of 114 airlines through 7 strategic industry partnerships.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Measure & Optimize</h3>
+                    <p>Track performance with our strategic ROI calculator and optimize campaigns based on real engagement data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Showcase Section -->
+    <section class="video-showcase">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">See RISE In Action</div>
+                <h2 class="section-title">Experience The <span class="gradient-text">Difference</span></h2>
+            </div>
+
+            <div class="video-showcase-container">
+                <video controls poster="reasons.png">
+                    <source src="reasons-to-visit-1080p.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-caption">
+                    <div class="video-caption-glass">
+                        <h3>Transforming Destination Marketing Through Inflight Entertainment</h3>
+                        <p>Discover how RISE connects your destination with 2.3 billion verified travelers annually through strategic inflight content placement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Touchpoints to Engage Section -->
+    <section class="touchpoints">
+        <div class="container">
+            <div class="section-header light">
+                <div class="section-badge">Engagement Channels</div>
+                <h2 class="section-title">Touchpoints to <span class="gradient-text">Engage</span></h2>
+            </div>
+
+            <div class="touchpoints-grid">
+                <div class="touchpoint-card">
+                    <div class="touchpoint-image">
+                        <img src="seatback.webp" alt="Seatback VOD">
+                    </div>
+                    <div class="touchpoint-content">
+                        <h3>Seatback VOD</h3>
+                        <p>Entertain passengers on seatback screens with "Reasons to Visit" content integrated into inflight entertainment systems.</p>
+                    </div>
+                </div>
+
+                <div class="touchpoint-card">
+                    <div class="touchpoint-image">
+                        <img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=500&q=80" alt="Wireless Video on Demand">
+                    </div>
+                    <div class="touchpoint-content">
+                        <h3>Wireless Video on Demand</h3>
+                        <p>Engage passengers via wireless inflight entertainment on their personal devices during the flight.</p>
+                    </div>
+                </div>
+
+                <div class="touchpoint-card">
+                    <div class="touchpoint-image">
+                        <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?w=500&q=80" alt="Moving Maps">
+                    </div>
+                    <div class="touchpoint-content">
+                        <h3>Moving Maps</h3>
+                        <p>Distribute reasons to visit as points of interest to maps companies integrated with airline IFE systems.</p>
+                    </div>
+                </div>
+
+                <div class="touchpoint-card">
+                    <div class="touchpoint-image">
+                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500&q=80" alt="Sponsored WiFi">
+                    </div>
+                    <div class="touchpoint-content">
+                        <h3>Sponsored WiFi</h3>
+                        <p>Increase engagement and conversion with sponsored internet campaigns promoting your destination.</p>
+                    </div>
+                </div>
+
+                <div class="touchpoint-card">
+                    <div class="touchpoint-image">
+                        <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&q=80" alt="Podcasts">
+                    </div>
+                    <div class="touchpoint-content">
+                        <h3>Podcasts</h3>
+                        <p>Speak directly to passengers globally with CEO "Why Visit?" podcast featuring destination highlights.</p>
+                    </div>
+                </div>
+
+                <div class="touchpoint-card">
+                    <div class="touchpoint-image">
+                        <img src="https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=500&q=80" alt="Live TV">
+                    </div>
+                    <div class="touchpoint-content">
+                        <h3>Live TV</h3>
+                        <p>Place your Reasons to Visit content in our "Live TV" inflight channel coming soon to major airlines.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12-Month Timeline Section -->
+    <section class="timeline-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Our Promise</div>
+                <h2 class="section-title">Our 12 Month Promise <span class="gradient-text">To You</span></h2>
+            </div>
+
+            <p class="timeline-intro">
+                Our 12 month program will unlock the world of inflight entertainment and access passengers dreaming and planning next vacation. Reach inflight audiences searching for destination information and inspiration.
+            </p>
+
+            <div class="timeline-diagram">
+                <img src="diagram_12_month.webp" alt="12 Month Timeline Diagram" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Client Success</div>
+                <h2 class="section-title">Hear From Our <span class="gradient-text">Partners</span></h2>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-video">
+                        <video controls poster="testimonial1-poster.png">
+                            <source src="testimonial1.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="testimonial-info">
+                        <h4>Patrick Brannelly</h4>
+                        <p>SVP Retail, IFE & Connectivity, Emirates</p>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-video">
+                        <video controls poster="testimonial2-poster.png">
+                            <source src="testimonial2.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="testimonial-info">
+                        <h4>Tash Coplestone-Crow</h4>
+                        <p>Connemara Blue Owner</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section 
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="section-header light">
+                <div class="section-badge">Our Network</div>
+                <h2 class="section-title">Trusted by <span class="gradient-text">Industry Leaders</span></h2>
+            </div>
+
+            <div class="partners-grid">
+                <div class="partner-logo">InflightFlix</div>
+                <div class="partner-logo">IFE Partner</div>
+                <div class="partner-logo">Global Airlines</div>
+                <div class="partner-logo">Content Network</div>
+                <div class="partner-logo">Travel Media</div>
+                <div class="partner-logo">Aviation Group</div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Contact Form Section -->
+    <section class="contact-form-section" id="get-in-touch">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Get In Touch</div>
+                <h2 class="section-title">Ready to Elevate Your<br><span class="gradient-text">Destination Marketing?</span></h2>
+            </div>
+
+            <p class="form-intro">
+                Enter your details below and one of our team will reach out and help show you why inflight is the new frontier for destination marketing.
+            </p>
+
+            <form class="contact-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyName">Company Name *</label>
+                        <input type="text" id="companyName" name="companyName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title</label>
+                        <input type="text" id="jobTitle" name="jobTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telephone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message"></textarea>
+                </div>
+
+                <div class="form-submit">
+                    <button type="submit" class="btn btn-primary">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo"><img src="logo.png" alt="RISE Logo"></div>
+                <p>Connecting passengers and places through strategic inflight content that inspires, informs, and converts.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="LinkedIn">in</a>
+                    <a href="#" aria-label="Twitter">𝕏</a>
+                    <a href="#" aria-label="Facebook">f</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul class="footer-links">
+                    <li><a href="#value">Value Proposition</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#partners">Partners</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="mailto:martin@inflightflix.aero">martin@inflightflix.aero</a></li>
+                    <li><a href="tel:+353861923500">+353 86 192 3500</a></li>
+                    <li><a href="https://www.inflightflix.aero">www.inflightflix.aero</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 RISE Program by InflightFlix. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (window.scrollY / scrollableHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.stat-card, .value-card, .step-card, .touchpoint-card, .testimonial-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animated Counter
+        function animateCounter(element, target, suffix = '') {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target + suffix;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current * 10) / 10 + suffix;
+                }
+            }, 20);
+        }
+
+        // Trigger counters when stats section is visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = document.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const target = parseFloat(stat.getAttribute('data-target'));
+                        const suffix = stat.getAttribute('data-target').includes('.') ? 'B' : '';
+                        animateCounter(stat, target, suffix);
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect on gradient orbs
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const orbs = document.querySelectorAll('.gradient-orb');
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 0.1;
+                orb.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add hover effect to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const ripple = document.createElement('span');
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: 20px;
+                    height: 20px;
+                    background: rgba(255, 255, 255, 0.5);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                    left: ${x}px;
+                    top: ${y}px;
+                `;
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(20);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add stagger animation to cards
+        const cards = document.querySelectorAll('.value-card, .step-card');
+        cards.forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>

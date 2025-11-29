@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE Program - DMO Proposal Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #003366;
+            --gold: #FFC72C;
+            --cyan: #00BCD4;
+            --orange: #FF8C00;
+        }
+
+        @page {
+            size: letter;
+            margin: 0.75in;
+        }
+
+        @media print {
+            body {
+                padding: 0.5in;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.75in;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+            color: var(--navy);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            border-bottom: 3px solid var(--cyan);
+            padding-bottom: 1rem;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--navy);
+            border-left: 5px solid var(--orange);
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--cyan);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .logo {
+            font-family: 'Merriweather', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+        }
+
+        .proposal-info {
+            text-align: right;
+            color: #666;
+        }
+
+        .proposal-info div {
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: var(--cyan);
+            font-style: italic;
+            margin-bottom: 3rem;
+            text-align: center;
+            font-weight: 300;
+        }
+
+        .executive-summary {
+            background: linear-gradient(135deg, rgba(0, 51, 102, 0.05) 0%, rgba(0, 188, 212, 0.05) 100%);
+            border-left: 4px solid var(--cyan);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 5px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--navy) 0%, #001f3f 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 3rem;
+            font-weight: 900;
+            font-family: 'Merriweather', serif;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .value-props {
+            margin: 2rem 0;
+        }
+
+        .value-item {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 3px solid var(--orange);
+        }
+
+        .value-item i {
+            font-size: 2rem;
+            color: var(--orange);
+            margin-top: 0.2rem;
+        }
+
+        .value-item h4 {
+            font-size: 1.3rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .value-item p {
+            color: #555;
+            font-size: 1.05rem;
+        }
+
+        .pricing-table {
+            margin: 2rem 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pricing-table th {
+            background: var(--navy);
+            color: white;
+            font-weight: 700;
+        }
+
+        .pricing-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--navy) 0%, #001f3f 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            color: white;
+            border: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--orange) 0%, #ff6b00 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .contact-info {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .contact-info h3 {
+            margin-top: 0;
+        }
+
+        .timeline {
+            margin: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            padding-left: 2rem;
+            border-left: 3px solid var(--cyan);
+        }
+
+        .timeline-item .phase {
+            font-weight: 700;
+            color: var(--navy);
+            min-width: 120px;
+        }
+
+        ul {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 199, 44, 0.1) 100%);
+            border: 2px solid var(--orange);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--orange);
+            font-size: 1.2rem;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+            .cta-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <div class="logo">RISE</div>
+            <div style="color: #666; margin-top: 0.5rem;">Reasons to Visit – Inflight Strategic Execution</div>
+        </div>
+        <div class="proposal-info">
+            <div><strong>Prepared for:</strong> [DMO Name]</div>
+            <div><strong>Date:</strong> [Insert Date]</div>
+            <div><strong>Contact:</strong> Martin O'Regan, CEO</div>
+            <div>martin@inflightflix.aero | +353 86 192 3500</div>
+        </div>
+    </div>
+
+    <div class="tagline">Connecting Passengers and Places</div>
+
+    <!-- Executive Summary -->
+    <h1><span>Executive</span> Summary</h1>
+
+    <div class="executive-summary">
+        <p><strong>The Challenge:</strong> Only 5% of Destination Marketing Organizations have an effective inflight marketing strategy, leaving 95% missing out on reaching 2.3 billion travelers annually when they're most receptive—at 35,000 feet, dreaming about their next destination.</p>
+
+        <p><strong>The Solution:</strong> RISE Program delivers the world's first turnkey inflight strategy-as-a-service, providing [DMO Name] with pre-approved content blueprints, access to 114 airlines through 7 strategic partnerships, and proprietary ROI tracking—all designed to maximize visitation while minimizing ad waste.</p>
+
+        <p><strong>The Outcome:</strong> Transform how your destination reaches, engages, and inspires real travelers with air access to [Destination Name], converting interest to intent during 2-18 hours of captive attention inflight.</p>
+    </div>
+
+    <!-- Stats -->
+    <h2>Our Network & Reach</h2>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number">2.3B</div>
+            <div class="label">Passengers Reached Annually</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">114</div>
+            <div class="label">Partner Airlines</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">7</div>
+            <div class="label">IFE Industry Partners</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">100%</div>
+            <div class="label">Verified Travelers</div>
+        </div>
+    </div>
+
+    <!-- The Problem -->
+    <h2>The Challenge Facing DMOs Today</h2>
+
+    <p>Traditional destination marketing strategies face four critical limitations:</p>
+
+    <div class="value-props">
+        <div class="value-item">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div>
+                <h4>Massive Ad Waste</h4>
+                <p>Digital campaigns reach broad audiences, but most viewers have no air access to your destination and will never visit.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div>
+                <h4>Fragmented Attention</h4>
+                <p>Social media gives you 3-5 seconds. Display ads are ignored. Inflight gives you 2-18 hours of captive, uninterrupted attention.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div>
+                <h4>Post-Decision Competition</h4>
+                <p>SEO and SEM reach travelers after they've already started searching—you're competing for clicks instead of planting inspiration.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div>
+                <h4>Complex IFE Industry Access</h4>
+                <p>Getting content onto airline entertainment systems requires insider partnerships, technical expertise, and globally consistent formats—barriers 95% of DMOs can't overcome alone.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Solution -->
+    <h2>How RISE Solves This for [DMO Name]</h2>
+
+    <p>RISE Program provides a turnkey inflight marketing strategy that removes all barriers:</p>
+
+    <h3>1. Pre-Approved Content Blueprint</h3>
+    <p>Your "Reasons to Visit" content is curated in formats pre-approved by inflight entertainment systems across all 114 partner airlines. No guesswork, no rejections, no delays.</p>
+
+    <h3>2. Strategic Partnership Network</h3>
+    <p>Through our 7 industry partnerships, your content is distributed across global IFE suppliers serving major airlines with routes to [Destination Name].</p>
+
+    <h3>3. Content Asset Management Platform</h3>
+    <p>Centralized DAM (Digital Asset Management) platform where you control and update your destination content for all inflight partners from one location.</p>
+
+    <h3>4. Strategic ROI Calculator</h3>
+    <p>Proprietary tracking system provides proof of performance—impressions, engagement rates, and conversion metrics aligned to your KPIs.</p>
+
+    <!-- Value Props -->
+    <h2>Six Unmatched Value Propositions</h2>
+
+    <div class="value-props">
+        <div class="value-item">
+            <i class="fa-solid fa-bullseye"></i>
+            <div>
+                <h4>Zero Ad Waste</h4>
+                <p>Reach 100% verified travelers with confirmed air access to [Destination Name]. Every impression is a potential visitor.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-plane"></i>
+            <div>
+                <h4>Captive Audience</h4>
+                <p>2-18 hours of uninterrupted dwell time. Your content has their full attention at 35,000 feet.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-lightbulb"></i>
+            <div>
+                <h4>Pre-Search Inspiration</h4>
+                <p>Reach travelers before they search Google. Plant the seed of inspiration when they're dreaming about their next adventure.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-rocket"></i>
+            <div>
+                <h4>First-Mover Advantage</h4>
+                <p>Only 5% of DMOs have an inflight strategy. Be ahead of 95% of your competition.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-chart-line"></i>
+            <div>
+                <h4>Strategic ROI Tracking</h4>
+                <p>Proof of performance with our proprietary ROI calculator. Know exactly what you're getting.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <i class="fa-solid fa-globe"></i>
+            <div>
+                <h4>Global Consistency</h4>
+                <p>Your message, perfectly formatted and distributed across every airline serving your key markets.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Implementation Timeline -->
+    <h2>Implementation Timeline</h2>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="phase">Phase 1<br>(Weeks 1-2)</div>
+            <div>
+                <strong>Strategy Development</strong>
+                <ul>
+                    <li>Analyze key markets and air access to [Destination Name]</li>
+                    <li>Identify target demographics and route networks</li>
+                    <li>Develop content strategy aligned to your KPIs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="phase">Phase 2<br>(Weeks 3-4)</div>
+            <div>
+                <strong>Content Creation & Approval</strong>
+                <ul>
+                    <li>Curate "Reasons to Visit" content in globally consistent formats</li>
+                    <li>Review and approval by [DMO Name]</li>
+                    <li>Technical formatting for IFE systems</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="phase">Phase 3<br>(Weeks 5-6)</div>
+            <div>
+                <strong>Distribution & Activation</strong>
+                <ul>
+                    <li>Upload content to DAM platform</li>
+                    <li>Distribute to partner airlines via 7 IFE suppliers</li>
+                    <li>Activate tracking and ROI measurement</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="phase">Ongoing</div>
+            <div>
+                <strong>Optimization & Reporting</strong>
+                <ul>
+                    <li>Monthly performance reports with engagement metrics</li>
+                    <li>Quarterly strategy reviews and content updates</li>
+                    <li>Continuous optimization based on data</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investment -->
+    <h2>Investment & Deliverables</h2>
+
+    <div class="highlight-box">
+        <p><strong>This proposal outlines a turnkey solution</strong> that includes strategy development, content creation, partnership management, platform access, and ongoing optimization—everything needed to execute a best-in-class inflight marketing program.</p>
+    </div>
+
+    <table class="pricing-table">
+        <tr>
+            <th>Deliverable</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>Inflight Strategy Development</strong></td>
+            <td>Complete analysis of routes, markets, and air access to inform content strategy</td>
+        </tr>
+        <tr>
+            <td><strong>Content Creation & Curation</strong></td>
+            <td>"Reasons to Visit" content in pre-approved formats for IFE systems</td>
+        </tr>
+        <tr>
+            <td><strong>DAM Platform Access</strong></td>
+            <td>Centralized content management for all inflight partners</td>
+        </tr>
+        <tr>
+            <td><strong>Partnership Network Distribution</strong></td>
+            <td>Access to 114 airlines through 7 strategic IFE partnerships</td>
+        </tr>
+        <tr>
+            <td><strong>Strategic ROI Tracking</strong></td>
+            <td>Proprietary calculator with monthly performance reports</td>
+        </tr>
+        <tr>
+            <td><strong>Ongoing Optimization</strong></td>
+            <td>Quarterly strategy reviews and content updates</td>
+        </tr>
+    </table>
+
+    <p style="margin-top: 1.5rem;"><em>For detailed pricing and package options, please schedule a consultation with our team.</em></p>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <h2>Ready to Transform Your Destination Marketing?</h2>
+        <p>Join the 5% of DMOs who are winning at inflight marketing. Let's connect [Destination Name] with millions of travelers when they're dreaming about their next adventure.</p>
+
+        <div class="cta-buttons">
+            <a href="mailto:martin@inflightflix.aero" class="btn btn-primary">Schedule a Consultation</a>
+            <a href="tel:+353861923500" class="btn btn-secondary">Call: +353 86 192 3500</a>
+        </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-info">
+        <h3>Contact Information</h3>
+        <p>
+            <strong>Martin O'Regan</strong> – CEO, InflightFlix<br>
+            Email: <a href="mailto:martin@inflightflix.aero">martin@inflightflix.aero</a><br>
+            Phone: <a href="tel:+353861923500">+353 86 192 3500</a><br>
+            Website: <a href="https://www.inflightflix.aero">www.inflightflix.aero</a>
+        </p>
+    </div>
+
+</body>
+</html>
